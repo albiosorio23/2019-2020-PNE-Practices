@@ -6,6 +6,6 @@ def fibon(n):
         n1 = n2
         n2 = n3
     return n1
-print ("5th Fibonacci term", fibon(5))
-print ("10th Fibonacci term", fibon(10))
-print ("15th Fibonacci term", fibon(15))
+print ("5th Fibonacci term:", fibon(5))
+print ("10th Fibonacci term:", fibon(10))
+print ("15th Fibonacci term:", fibon(15))
