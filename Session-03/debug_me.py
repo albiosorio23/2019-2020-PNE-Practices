@@ -13,7 +13,6 @@ def f(a, b, c, d):
         t3 = 0
     return t0 + 2*t1 + t3*t3
 
-
 # -- Main program
 print("Result 1: ", f(5, 2, 5, 0))
 print("Result 2: ", f(0, 2, 3, 3))
