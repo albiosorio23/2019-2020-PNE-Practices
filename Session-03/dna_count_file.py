@@ -16,5 +16,4 @@ with open('dna.txt', 'r') as f:
                 sum_G += 1
             total_length += 1
     f.close()
-
 print ("The total lenght is:", total_length, "\nA:", sum_A,"\nC:", sum_C, "\nT:", sum_T,"\nG:", sum_G)
