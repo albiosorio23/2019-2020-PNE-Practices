@@ -7,18 +7,14 @@ class Seq:
                 self.strbases = "Error" #nombre que le das dentro del objeto (self.) ahora queremos comprobar si es correcto antes de almacenarlo
                 print("Error")
                 return
-            #else:
-                #self.strbases = strbases
-                #print("New sequence created!")
 
         self.strbases = strbases
         print("New sequence created!")
 
-    def __str__(self):
+    def __str__(self): #Para que te lo imprima en el formato que quieres
         return self.strbases
 
-    def len(self):
-        return len(self.strbases)
+
 
 
 s1 = Seq("ACCTGC")
