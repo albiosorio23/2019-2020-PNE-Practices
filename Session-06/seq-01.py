@@ -11,10 +11,7 @@ class Seq:
         return len(self.strbases)
 
 class Gene(Seq):
-
     pass
-
-
 #Main program
 s1 = Seq("AACGTC")
 g = Gene ("ACCTGA")
