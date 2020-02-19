@@ -1,8 +1,21 @@
 class Seq:
     """A class for representing a sequence objects"""
-    def __init__(self, strbases):
+    def __init__(self, strbases="NULL"): #espera que le mandes una secuencia, al ponerle el null si está vacía no te da error
+        if strbases== "NULL":
+            self.strbases = "NULL"
+            print("NULL Seq created")
+            return
+
+        for element in strbases:
+            list = ["A", "C", "G", "T"]
+            if element not in list:
+                self.strbases = "Error"  # nombre que le das dentro del objeto (self.) ahora queremos comprobar si es correcto antes de almacenarlo
+                print("Error")
+                return
+
         self.strbases = strbases
-        print ("New sequence created! ")
+        print("New sequence created!")
+
 
     def __str__(self):
         return self.strbases
@@ -10,5 +23,6 @@ class Seq:
     def len(self):
         return len(self.strbases)
 
-#Main program
-S1 = Seq("ACTGA")
+
+
+
