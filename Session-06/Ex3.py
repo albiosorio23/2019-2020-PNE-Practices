@@ -12,7 +12,7 @@ class Seq:
     def len(self):
         return len(self.strbases)
 
-sequence_list = [Seq("ACT"), Seq("GATA"), Seq("CAGATA")]
+
 
 def print_seqs(seq_list):
     for seq in seq_list:
