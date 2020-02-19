@@ -9,7 +9,7 @@ for element in list:
     dict_bases = seq_count(seq)
     minimum = 0 #Para que se vaya quedando con el menor valor de los que vaya leyendo
     best = ""
-    for base, value in dict_bases.items(): #
+    for base, value in dict_bases.items():
         while value > minimum:
             minimum = value
             best = base
