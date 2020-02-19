@@ -30,6 +30,13 @@ class Seq:
             return 0
         return self.strbases.count(base)
 
+    def count(self):
+        dict = {"A": self.count_base(self, "A"), "T": self.count_base(self), "C": self.count_base(self, "C"),
+                "G": self.count_base(self, "G")} #no se si hay que poner strbases
+        if self.strbases == "NULL" or self.strbases == "Error":
+            return 0
+        return dict
+
 
 
 
