@@ -21,6 +21,8 @@ class Seq:
         return self.strbases
 
     def len(self):
+        if self.strbases == "NULL" or self.strbases == "Error":
+            return 0
         return len(self.strbases)
 
 
