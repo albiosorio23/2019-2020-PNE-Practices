@@ -2,7 +2,7 @@ from Seq1 import Seq
 
 s = Seq()
 FOLDER = "../Session-04/"
-list = ["U5.txt", "ADA.txt", "FRAT1.txt", "FXN"]
+list = ["U5.txt", "ADA.txt", "FRAT1.txt", "FXN", "RNU6_269P.txt"]
 bases = ["A","G", "C", "T"]
 
 for element in list:
