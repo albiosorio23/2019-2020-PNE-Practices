@@ -34,9 +34,26 @@ class Seq:
         dict = {"A": self.count_base("A"), "T": self.count_base("T"), "C": self.count_base("C"),
                 "G": self.count_base("G")} #no se si hay que poner strbases
         if self.strbases == "NULL" or self.strbases == "Error":
-            return ("A:", 0, "T:", 0, "C:",0, "G:", 0 )
+            return "A:", 0, "T:", 0, "C:", 0, "G:", 0
         return dict
 #Como se pone cuando es null
 
+    def reverse(self):
+        if self.strbases == "NULL":
+            return self.strbases
+        elif self.strbases == "Error":
+            return self.strbases
 
+        return self.strbases[::-1]
 
+    def complement(self):
+        if self.strbases == "NULL":
+            return self.strbases
+        elif self.strbases == "Error":
+            return self.strbases
+
+        dict = {"A": "T", "T": "A", "C": "G", "G": "C"}
+        complement_seq = ""
+        for element in self.strbases:
+            complement_seq = complement_seq + dict[element]
+        return complement_seq
