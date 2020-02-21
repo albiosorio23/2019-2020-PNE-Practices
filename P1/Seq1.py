@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 class Seq:
     """A class for representing a sequence objects"""
     def __init__(self, strbases="NULL"): #espera que le mandes una secuencia, al ponerle el null si está vacía no te da error
@@ -57,3 +60,16 @@ class Seq:
         for element in self.strbases:
             complement_seq = complement_seq + dict[element]
         return complement_seq
+
+    def read_fasta(self, filename):
+        #Read the file
+        file_contents = Path(filename).read_text()
+        #Remove the head
+        body = file_contents.split('\n')[1:]
+        #Store the sequence read from the file
+        self.strbases = "".join(body)
+        return self
+
+
+
+
