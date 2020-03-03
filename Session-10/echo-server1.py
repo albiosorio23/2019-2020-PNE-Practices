@@ -34,7 +34,7 @@ while True:
         # Step 5: Receiving information from the client
         msg_raw = cs.recv(2000)
         msg = msg_raw.decode()
-        print ("Received message:")
+        print ("Received message:", end="")
         termcolor.cprint(f"{msg}", "green")
         # termcolor.cprint(f"Received message: {msg}", "green")
 
