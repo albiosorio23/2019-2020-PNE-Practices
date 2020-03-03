@@ -3,7 +3,7 @@ import socket
 import termcolor
 
 IP = "212.128.253.150"
-PORT = 8081
+PORT = 8080
 # Step 1: creating the socket for comunicating
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -21,12 +21,13 @@ ls.listen()
 
 print("Server is configured!")
 count_conections = 0
-while True:
-
+list = []
+while count_conections < 5:
     try:
         # Step 4: Wait for client to connect
         (cs, client_ip_port) = ls.accept()
         count_conections = count_conections + 1
+        list.append(client_ip_port)
 
     except KeyboardInterrupt:
         print("Server is done!")
@@ -48,3 +49,8 @@ while True:
 
         cs.send(response.encode())
         cs.close()
+
+print("The following clients has connected to the server: ")
+
+for client in range(len(list)):
+    print(f"Client {client}: {list[client]}")
