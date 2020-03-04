@@ -18,6 +18,10 @@ ls.listen()
 
 print("Server is configured!")
 
+
+list_response = ["AGCGTA", "CTATGC", "GGATCG", "TGTAAA", "GGGTT"]
+
+
 while True:
 
     try:
@@ -34,11 +38,24 @@ while True:
         # Step 5: Receiving information from the client
         msg_raw = cs.recv(2000)
         msg = msg_raw.decode()
-        if msg == "PING":
+        #space = msg.split("\n")[0].split(" ")
+        #command1 = space[0]
+        response = ""
+        command2 = msg[1]
+
+        if msg =="PING":
             response = "OK!\n"
 
         termcolor.cprint("PING command!", "green")
         print(response)
+
+
+        #for i in range(list_response):
+        if "GET" in msg:
+            seq_get = int(msg[msg.find(" ") + 1:])
+            response = list_response[seq_get]
+
+
 
         # Step 6: Send a response message to the client
         #response = f"ECHO: {msg}\n"
