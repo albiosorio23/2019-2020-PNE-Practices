@@ -1,4 +1,5 @@
-Machine       | Interface   | Date        |  Place       |   IP            |
---------------|-------------|-------------|--------------|-----------------|
-Mobile        | Wifi        | 2020-Feb-24 | Alcorcon Lab | 10.3.33.248     |
-Lab computer  | Wire        |2020-Feb-24  | Alcorcon Lab | 212.128.253.157 |
+Machine       | Interface   | Date          |  Place       |   IP            |
+--------------|-------------|---------------|--------------|-----------------|
+Mobile        | Wifi        | 2020-Feb-24   | Alcorcon Lab | 10.3.33.248     |
+Lab computer  | Wire        | 2020-Feb-24   | Alcorcon Lab | 212.128.253.157 |
+Mobile home   | Wifi        | 2020-March-12 | Ourense home | 192.168.1.40    |
