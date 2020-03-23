@@ -1,6 +1,7 @@
 import socket
 import termcolor
 
+
 # -- Server network parameters
 IP = "127.0.0.1"
 PORT = 8080
@@ -49,10 +50,10 @@ def process_client(s):
     status_line = "HTTP/1.1 200 OK\n"
 
     # -- Add the Content-Type header
-    header = "Content-Type: text/plain\n"
+    header = "Content-Type: text/html\n"
 
     # -- Add the Content-Length
-    header += f"Content-Length: {len(body)}\n"
+    header += f"Content-Length: 5\n"
 
     # -- Build the message by joining together all the parts
     response_msg = status_line + header + "\n" + body
@@ -92,17 +93,4 @@ while True:
         # -- Close the socket
         cs.close()
 
-# La página no se pone verde, aparece esto, pero si que puedo ver Request line: GET / HTTP/1.1 en verde  :
-#     <!DOCTYPE html>
-#     <html lang="en" dir="ltr">
-#       <head>
-#         <meta charset="utf-8">
-#         <title>Green server</title>
-#       </head>
-#       <body style="background-color: lightgreen;">
-#         <h1>GREEN SERVER</h1>
-#         <p>I am the Green Server! :-)</p>
-#         <p>This is another paragraph</p>
-#         <h2>Header 2</h2>
-#       </body>
-#     </html>
+# Al cambiar el content length la página me aprece en blanco pero la request line me sigue apareciendo igual 
