@@ -2,7 +2,7 @@ import socket
 
 import termcolor
 
-IP = "127.0.0.1" #local machines, asi no tienes que ir cambiando el IP
+IP = "127.0.0.1"  # local machines, asi no tienes que ir cambiando el IP
 PORT = 8080
 # Step 1: creating the socket for comunicating
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,9 +18,7 @@ ls.listen()
 
 print("Server is configured!")
 
-
 list_response = ["AGCGTA", "CTATGC", "GGATCG", "TGTAAA", "GGGTT"]
-
 
 while True:
 
@@ -38,27 +36,25 @@ while True:
         # Step 5: Receiving information from the client
         msg_raw = cs.recv(2000)
         msg = msg_raw.decode()
-        #space = msg.split("\n")[0].split(" ")
-        #command1 = space[0]
+        # space = msg.split("\n")[0].split(" ")
+        # command1 = space[0]
         response = ""
         command2 = msg[1]
 
-        if msg =="PING":
+        if msg == "PING":
             response = "OK!\n"
 
         termcolor.cprint("PING command!", "green")
         print(response)
 
-
-        #for i in range(list_response):
-        if "GET" in msg:
-            seq_get = int(msg[msg.find(" ") + 1:])
+        # for i in range(list_response):
+        elif "GET" in msg:
+            seq_get = int(msg[msg.find(" ") + 1:]) # Seq_get es el número del 0-4 que introduce en la terminal
             response = list_response[seq_get]
 
-
-
-        # Step 6: Send a response message to the client
-        #response = f"ECHO: {msg}\n"
+        # Info command
+        elif "INFO" in msg:
+            
 
         cs.send(response.encode())
         cs.close()
