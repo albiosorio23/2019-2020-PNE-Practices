@@ -22,6 +22,10 @@ def get_resource(path):
     elif path == "/info/T":
         response = Path("T.html").read_text()
 
+    elif path == "/info/":
+        response = Path("index.html").read_text()
+
+
     elif path != "/info/T" and path != "/info/C" and path != "/info/C" and path != "/info/A":
         response = Path("Error.html").read_text()
     # Con el else también vale
