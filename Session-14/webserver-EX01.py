@@ -20,19 +20,34 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Print the request line
         termcolor.cprint(self.requestline, 'green')
 
-        # IN this simple server version:
-        # We are NOT processing the client's request
-        # It is a happy server: It always returns a message saying
-        # that everything is ok
+        req_line = self.requestline.split(" ")
 
-        # Message to send back to the clinet
-        contents = "I am the happy server! :-)"
+        # Get the path which always start with /
+        path = req_line[1]
+
+        # Para que cojatodo lo que está después de la /
+        path = path[1:]
+
+        contents =""
+
+        results = 0
+
+        content_type = 'text/plain'
+
+        if path == "":
+
+            # Message to send back to the clinet
+            contents = "Welcome to my server"
+            results = 200
+        else:
+            contents = "Resource not available"
+            results = 404
 
         # Generating the response message
-        self.send_response(200)  # -- Status line: OK!
+        self.send_response(results)  # -- Status line: OK!
 
         # Define the content-type header:
-        self.send_header('Content-Type', 'text/plain')
+        self.send_header('Content-Type', content_type)
         self.send_header('Content-Length', len(contents.encode()))
 
         # The header is finished
