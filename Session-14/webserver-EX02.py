@@ -37,14 +37,23 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         content_type = 'text/html'
 
         # -- Depending on the resource requested
-        if path == "index.html" or path == "":
+        if path == "":
+            path = "index.html"
+
+            # -- Depending on the resource requested
+        if path == "index.html":
             termcolor.cprint("Main page requested", 'blue')
 
-        # Read the resource as a file
-        try:
+            # Read the index from the file
             contents = Path(path).read_text()
+
+            # Status code is ok
             status = 200
-        except FileNotFoundError:
+        else:
+            # -- Resource NOT FOUND
+            termcolor.cprint("ERROR: Not found", 'red')
+
+            # Message to send back to the clinet
             contents = Path("Error.html").read_text()
 
             # Status code is NOT FOUND
