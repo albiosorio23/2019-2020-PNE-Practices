@@ -38,18 +38,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         # -- Depending on the resource requested
         if path == "index.html" or path == "":
-            termcolor.cprint("Main page requested", 'blue')
+            # -- Read the resource as a file
+            try:
+                contents = Path(path).read_text()
+                status = 200
+            except FileNotFoundError:
+                contents = Path("Error.html").read_text()
 
-        # Read the resource as a file
-        try:
-            contents = Path(path).read_text()
-            status = 200
-        except FileNotFoundError:
-            contents = Path("Error.html").read_text()
-
-            # Status code is NOT FOUND
-            status = 404
-
+                # Status code is NOT FOUND
+                status = 404
 
         # Generating the response message
         self.send_response(status)
