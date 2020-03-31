@@ -3,7 +3,6 @@ import socketserver
 import termcolor
 from pathlib import Path
 
-
 # Define the Server's port
 PORT = 8080
 
@@ -39,17 +38,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         print(path)
 
         # -- Depending on the resource requested
-        if path == "index.html" or path == "":
-            # -- Read the resource as a file
-            try:
-                contents = Path(path).read_text()
-                status = 200
+        if path == "":
+            path = "index.html"
 
-            except FileNotFoundError:
-                contents = Path("Error.html").read_text()
+        # Read the resource as a file
+        try:
+            contents = Path(path).read_text()
+            status = 200
 
-                # Status code is NOT FOUND
-                status = 404
+        except FileNotFoundError:
+            contents = Path("Error.html").read_text()
+
+            # Status code is NOT FOUND
+            status = 404
 
         # Generating the response message
         self.send_response(status)
@@ -75,7 +76,6 @@ Handler = TestHandler
 
 # -- Open the socket server
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
-
     print("Serving at PORT", PORT)
 
     # -- Main loop: Attend the client. Whenever there is a new
