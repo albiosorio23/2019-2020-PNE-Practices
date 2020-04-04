@@ -64,7 +64,7 @@ class Seq:
             complement_seq = complement_seq + dict[element]
         return complement_seq
 
-    def read_fasta(self, filename):
+    def read_fasta (self, filename):
         # Read the file
         file_contents = Path(filename).read_text()
         # Remove the head
