@@ -1,7 +1,6 @@
 import socket
 import termcolor
 
-
 class Client:
     def ping(self):
         print("OK!")
