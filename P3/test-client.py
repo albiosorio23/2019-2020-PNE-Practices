@@ -13,7 +13,7 @@ PORT = 8080
 c = Client(IP, PORT)
 print(c)
 
-print("Connection to SERVER at", IP, ", PORT: ", PORT)
+#print("Connection to SERVER at", IP, ", PORT: ", PORT)
 
 # Test PING
 print("* Testing PING...")
@@ -30,4 +30,19 @@ print("GET 4:", c.talk("GET 4"))
 # Test "INFO"
 # We are going to use the sequence GET 0
 print ("* Testing INFO...")
-print(c.talk("INFO " + c.talk("GET 0")))
+print(c.talk("INFO" + c.talk("GET 0")))
+
+# Test "COMP"
+print("* Testing COMP...")
+print(c.talk("COMP" + c.talk("GET 0")))
+
+# Test "REV"
+print("* Testing REV...")
+print(c.talk("REV" + c.talk("GET 0")))
+
+# Test "GENE"
+print("* Testing GENE...")
+for gene in ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]:
+    print("GENE" + c.talk(gene))
+
+
