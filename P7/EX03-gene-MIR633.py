@@ -2,24 +2,21 @@ import http.client
 import json
 import termcolor
 
-GENES = {"FRAT1" : "ENSG00000165879", "ADA": "ENSG00000196839",
-         "FXN": "ENSG00000165060","RNU6-269P": "ENSG00000212379",
-         "MIR633": "ENSG00000207552","TTTY4C": "ENSG00000228296",
-         "RBMY2YP": "ENSG00000227633","FGFR3": "ENSG00000068078",
-         "KDR": "ENSG00000128052","ANK2": "ENSG00000145362"}
+GENES = {"FRAT1": "ENSG00000165879", "ADA": "ENSG00000196839",
+         "FXN": "ENSG00000165060", "RNU6-269P": "ENSG00000212379",
+         "MIR633": "ENSG00000207552", "TTTY4C": "ENSG00000228296",
+         "RBMY2YP": "ENSG00000227633", "FGFR3": "ENSG00000068078",
+         "KDR": "ENSG00000128052", "ANK2": "ENSG00000145362"}
 
-
-Gene_name ="MIR633"
+Gene_name = "MIR633"
 Server = "rest.ensembl.org"
-Endpoint ="/sequence/id/"
-Parameters ="?content-type=application/json"
+Endpoint = "/sequence/id/"
+Parameters = "?content-type=application/json"
 Request_line = Endpoint + GENES[Gene_name] + Parameters
 URL = Server + Request_line
 
 print(f"Server: {Server}")
 print(f"URL: {URL}")
-
-
 
 # Connect with the server
 conn = http.client.HTTPConnection(Server)

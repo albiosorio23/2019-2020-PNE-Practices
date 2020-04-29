@@ -42,7 +42,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # contents = Path("form-2.html").read_text()
             # contents = Path("form-3.html").read_text()
             contents = Path("form-4.html").read_text()
-
             status = 200
 
         elif action == "/ping":  # Escribe en la pg principal
