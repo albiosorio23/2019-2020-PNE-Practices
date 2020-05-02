@@ -1,0 +1,8 @@
+1)List of species in the genome database
+Json used : http://rest.ensembl.org/info/species?content-type=application/json
+
+2)Information about the karyotype:
+Json used : http://rest.ensembl.org/info/assembly/mouse?content-type=application/json
+
+3)Chromosome Length
+Json used: http://rest.ensembl.org/info/species?content-type=application/json

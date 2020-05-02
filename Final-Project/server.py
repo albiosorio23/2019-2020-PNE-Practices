@@ -51,6 +51,73 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             #number = limit_and_number.split("=")[1]
             #status = 200
 
+        elif endpoint == "/listSpecies":
+            # Coger lo que está despues del interrogante (limit=10)
+            limit_number = arguments[1]
+            # Coger la especie que seleccionas
+            limit = limit_number.split("=")[1]
+            Endpoint = "/info/species"
+            #esta es la re line para bucar la información
+            Request_line = Endpoint + Parameters
+
+            try:
+                conn.request("GET", Request_line)
+            except ConnectionRefusedError:
+                print("ERROR! Cannot connect to the Server")
+                exit()
+
+            # -- Read the response message from the server
+            r1 = conn.getresponse()
+
+            # -- Read the response's body
+            data1 = r1.read().decode("utf-8")
+
+            # -- Create a variable with the data,
+            # -- form the JSON received
+            name_specie_ = json.loads(data1)
+            name_specie = name_specie_["species"]
+            #count = 0
+            #list = []
+            if limit == "":
+                contents = f""" 
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                              <title> Information about the karyotype </title >
+                            </head >
+                            <body>
+                            <body style="background-color: lightblue;">
+                            <h2> Total number of species is: 267</h2>
+                            </body>
+                            </html>
+                            """
+
+                for element in name_specie:
+                    contents = contents + f""" <p> {element["common_name"]} </p>"""
+
+            elif int(limit) > 267:
+                contents = Path('Error.html').read_text()
+                status = 404
+            else:
+                contents = f""" 
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                              <title> Information about the karyotype </title >
+                            </head >
+                            <body>
+                            <body style="background-color: lightblue;">
+                            <h2> Total number of species is: 267</h2>
+                            <p> The limit you have selected is: {limit} </p>
+                            <p> The name of the species are: </p>
+                            </body>
+                            </html>
+                            """
+                status = 200
+                for element in name_specie[:int(limit)]:
+                    contents = contents + f""" <p> . {element["common_name"]}</p>"""
 
         elif endpoint == "/karyotype":
             # Coger lo que está despues del interrogante (specie=mouse)
@@ -142,14 +209,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         </html>
                         """
             status = 200
-        #elif action == "/gene":
-            #gene_and_name = arguments[1]
-            #name = gene_and_name.split("=")[1]
-            #s = Seq("")
-            #s_str = str(s.read_fasta(FOLDER + name + TEXT))
-
-
-            #status = 200
 
         else:
             # -- Resource NOT FOUND
