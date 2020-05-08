@@ -3,20 +3,31 @@ import socketserver
 import termcolor
 from pathlib import Path
 import json
-from Seq1 import Seq
 
-# Define the Server's port
 PORT = 8080
-
+Server = "rest.ensembl.org"
+Parameters = "?content-type=application/json"
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
 
-Server = "rest.ensembl.org"
-Parameters ="?content-type=application/json"
 
-# Connect with the server
-conn = http.client.HTTPConnection(Server)
+def server(Request_line):
+    # Connect with the server
+    conn = http.client.HTTPConnection(Server)
+    try:
+        conn.request("GET", Request_line)
+    except ConnectionRefusedError:
+        print("ERROR! Cannot connect to the Server")
+        exit()
 
+    # -- Read the response message from the server
+    r1 = conn.getresponse()
+
+    # -- Read the response's body
+    data = r1.read().decode("utf-8")
+    data1 = json.loads(data)
+
+    return data1
 
 
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
@@ -41,158 +52,100 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         endpoint = arguments[0]
 
-        if endpoint == "/":  # Manda la pg principal
+        if endpoint == "/":  # Main page
             contents = Path("Finalproject.html").read_text()
             status = 200
 
-        #elif endpoint == "/listSpecies":  # Escribe en la pg principal
-            # después del ?
-            #limit_and_number = arguments[1]
-            #number = limit_and_number.split("=")[1]
-            #status = 200
-
         elif endpoint == "/listSpecies":
-            # Coger lo que está despues del interrogante (limit=10)
+            # Get what is after ? (limit=10)
             limit_number = arguments[1]
-            # Coger la especie que seleccionas
+            # Get selected specie
             limit = limit_number.split("=")[1]
             Endpoint = "/info/species"
-            #esta es la re line para bucar la información
+            # This is the req line to search the info
             Request_line = Endpoint + Parameters
 
-            try:
-                conn.request("GET", Request_line)
-            except ConnectionRefusedError:
-                print("ERROR! Cannot connect to the Server")
-                exit()
+            # Create a variable with the data, form the JSON received
+            name_specie = server(Request_line)["species"]
 
-            # -- Read the response message from the server
-            r1 = conn.getresponse()
-
-            # -- Read the response's body
-            data1 = r1.read().decode("utf-8")
-
-            # -- Create a variable with the data,
-            # -- form the JSON received
-            name_specie_ = json.loads(data1)
-            name_specie = name_specie_["species"]
-            #count = 0
-            #list = []
-            if limit == "":
-                contents = f""" 
-                            <!DOCTYPE html>
-                            <html lang = "en">
-                            <head>
-                            <meta charset = "utf-8" >
-                              <title> Information about the karyotype </title >
-                            </head >
-                            <body>
-                            <body style="background-color: lightblue;">
-                            <h2> Total number of species is: 267</h2>
-                            </body>
-                            </html>
-                            """
-
-                for element in name_specie:
-                    contents = contents + f""" <p> {element["common_name"]} </p>"""
-
-            elif int(limit) > 267:
-                contents = Path('Error.html').read_text()
-                status = 404
-            else:
-                contents = f""" 
-                            <!DOCTYPE html>
-                            <html lang = "en">
-                            <head>
-                            <meta charset = "utf-8" >
-                              <title> Information about the karyotype </title >
-                            </head >
-                            <body>
-                            <body style="background-color: lightblue;">
-                            <h2> Total number of species is: 267</h2>
-                            <p> The limit you have selected is: {limit} </p>
-                            <p> The name of the species are: </p>
-                            </body>
-                            </html>
-                            """
-                status = 200
-                for element in name_specie[:int(limit)]:
-                    contents = contents + f""" <p> . {element["common_name"]}</p>"""
-
-        elif endpoint == "/karyotype":
-            # Coger lo que está despues del interrogante (specie=mouse)
-            specie_name = arguments[1]
-            # Coger la especie que seleccionas
-            name_specie = specie_name.split("=")[1]
-            Endpoint = "/info/assembly/"
-            #esta es la re line para bucar la información
-            Request_line = Endpoint + name_specie + Parameters
-
-            try:
-                conn.request("GET", Request_line)
-            except ConnectionRefusedError:
-                print("ERROR! Cannot connect to the Server")
-                exit()
-
-            # -- Read the response message from the server
-            r1 = conn.getresponse()
-
-            # -- Print the status line
-            #print(f"Response received!: {r1.status} {r1.reason}\n")
-
-            # -- Read the response's body
-            data1 = r1.read().decode("utf-8")
-
-            # -- Create a variable with the data,
-            # -- form the JSON received
-            k_specie = json.loads(data1)
-
-
-            # POnemos la f antes para que así te añada las seq y el número seleccionado
+            count_species = 0
+            for element in name_specie:
+                count_species = count_species + 1
             contents = f""" 
                         <!DOCTYPE html>
                         <html lang = "en">
                         <head>
                         <meta charset = "utf-8" >
-                          <title> Information about the karyotype </title >
+                          <title> List of species </title >
                         </head >
                         <body>
                         <body style="background-color: lightblue;">
-                        <h2> The names of the chromosomes are:</h2>
-                        <p> {k_specie["karyotype"]} </p>
                         </body>
                         </html>
                         """
-            status = 200
+            if limit == "":
+                contents += f""" <p> Total number of species is: {count_species} </p>"""
+                contents += f"""<a href="/">Main page</a>"""
+                status = 200
+
+            elif int(limit) > count_species:
+                contents = Path('Error.html').read_text()
+                status = 404
+            else:
+                contents = contents + f""" <p> Total number of species is: {count_species}
+                        <p> The limit you have selected is: {limit}</p>
+                        <p> The name of the species are: </p>"""
+
+                status = 200
+                for element in name_specie[:int(limit)]:
+                    contents += f""" <p>   • {element["common_name"]}</p>"""
+                contents += f"""<a href="/">Main page</a>"""
+        elif endpoint == "/karyotype":
+            # Get what is after ? (specie=mouse)
+            specie_name = arguments[1]
+            # Get selected specie
+            name_specie = specie_name.split("=")[1]
+            Endpoint = "/info/assembly/"
+            # This is the req line to search the info
+            Request_line = Endpoint + name_specie + Parameters
+            try:
+                Request_line.isidentifier()
+                # Create a variable with the data,form the JSON received
+                k_specie = server(Request_line)
+                contents = f""" 
+                           <!DOCTYPE html>
+                           <html lang = "en">
+                           <head>
+                           <meta charset = "utf-8" >
+                             <title> Information about the karyotype </title >
+                           </head >
+                           <body>
+                           <body style="background-color: lightblue;">
+                           <p>The names of the chromosomes are:</p>
+                           </body>
+                           </html> 
+                           """
+                status = 200
+                for element in k_specie["karyotype"]:
+                    contents += f"""<p>{element}</p>"""
+                contents += f"""<a href="/">Main page</a>"""
+
+            except KeyError:
+                contents = Path("Error.html").read_text()
+
 
         elif endpoint == "/chromosomeLength":
-            # Coger lo que está despues del interrogante (specie=mouse&chromo=18)
+            # Get what is after ? (specie=mouse&chromo=18)
             specie_chromo = arguments[1]
-            # Coger la especie que seleccionas
+            # Get the specie that we select
             name_specie = specie_chromo.split("&")[0].split("=")[1]
             number_chromo = specie_chromo.split("&")[1].split("=")[1]
             Endpoint = "/info/assembly/"
-            # esta es la req line para bucar la información
+            # This is the req line to search the info
             Request_line = Endpoint + name_specie + "/" + number_chromo + Parameters
 
-            try:
-                conn.request("GET", Request_line)
-            except ConnectionRefusedError:
-                print("ERROR! Cannot connect to the Server")
-                exit()
-
-            # -- Read the response message from the server
-            r1 = conn.getresponse()
-
-            # -- Print the status line
-            # print(f"Response received!: {r1.status} {r1.reason}\n")
-
-            # -- Read the response's body
-            data1 = r1.read().decode("utf-8")
-
-            # -- Create a variable with the data,
-            # -- form the JSON received
-            l_chromosome = json.loads(data1)
+            # -- Create a variable with the data, form the JSON received
+            l_chromosome = server(Request_line)
 
             # POnemos la f antes para que así te añada las seq y el número seleccionado
             contents = f""" 
@@ -200,11 +153,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         <html lang = "en">
                         <head>
                         <meta charset = "utf-8" >
-                            <title> Information about the karyotype </title >
+                            <title> Length of the selected chromosome </title >
                         </head >
                         <body>
                         <body style="background-color: lightblue;">
                         <h2> The length of the chromosome is: {l_chromosome["length"]}</h2>
+                        <a href="/">Main page</a>
                         </body>
                         </html>
                         """
@@ -234,7 +188,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(str.encode(contents))
 
         return
-
 
 # ------------------------
 # - Server MAIN program
