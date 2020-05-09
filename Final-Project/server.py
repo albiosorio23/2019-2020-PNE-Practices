@@ -20,10 +20,10 @@ def server(Request_line):
         print("ERROR! Cannot connect to the Server")
         exit()
 
-    # -- Read the response message from the server
+    # Read the response message from the server
     r1 = conn.getresponse()
 
-    # -- Read the response's body
+    # Read the response's body
     data = r1.read().decode("utf-8")
     data1 = json.loads(data)
 
@@ -79,12 +79,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                           <title> List of species </title >
                         </head >
                         <body>
+                        <p> Total number of species is: {count_species} </p>
                         <body style="background-color: lightblue;">
                         </body>
                         </html>
                         """
             if limit == "":
-                contents += f""" <p> Total number of species is: {count_species} </p>"""
                 contents += f"""<a href="/">Main page</a>"""
                 status = 200
 
@@ -92,8 +92,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 contents = Path('Error.html').read_text()
                 status = 404
             else:
-                contents = contents + f""" <p> Total number of species is: {count_species}
-                        <p> The limit you have selected is: {limit}</p>
+                contents = contents + f""" <p> The limit you have selected is: {limit}</p>
                         <p> The name of the species are: </p>"""
 
                 status = 200
@@ -132,6 +131,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             except KeyError:
                 contents = Path("Error.html").read_text()
+                status = 404
 
 
         elif endpoint == "/chromosomeLength":
@@ -143,29 +143,34 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             Endpoint = "/info/assembly/"
             # This is the req line to search the info
             Request_line = Endpoint + name_specie + "/" + number_chromo + Parameters
+            try:
+                Request_line.isidentifier()
 
-            # -- Create a variable with the data, form the JSON received
-            l_chromosome = server(Request_line)
+                # Create a variable with the data, form the JSON received
+                l_chromosome = server(Request_line)
 
-            # POnemos la f antes para que así te añada las seq y el número seleccionado
-            contents = f""" 
-                        <!DOCTYPE html>
-                        <html lang = "en">
-                        <head>
-                        <meta charset = "utf-8" >
-                            <title> Length of the selected chromosome </title >
-                        </head >
-                        <body>
-                        <body style="background-color: lightblue;">
-                        <h2> The length of the chromosome is: {l_chromosome["length"]}</h2>
-                        <a href="/">Main page</a>
-                        </body>
-                        </html>
-                        """
-            status = 200
+                contents = f""" 
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title> Length of the selected chromosome </title >
+                            </head >
+                            <body>
+                            <body style="background-color: lightblue;">
+                            <p> The length of the chromosome is: {l_chromosome["length"]}</p>
+                            <a href="/">Main page</a>
+                            </body>
+                            </html>
+                            """
+                status = 200
+
+            except KeyError:
+                contents = Path("Error.html").read_text()
+                status = 404
 
         else:
-            # -- Resource NOT FOUND
+            # Resource NOT FOUND
             termcolor.cprint("ERROR: Not found", 'red')
 
             # Message to send back to the clinet
