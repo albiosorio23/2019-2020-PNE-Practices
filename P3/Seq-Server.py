@@ -56,7 +56,7 @@ while True:
             gene_seq = msg[msg.find(" ")+1:] #Secuencia introducida en la terminal
 
             seq = Seq(gene_seq)
-            seq_length = len(gene_seq)
+            seq_length = seq.len()
 
             print("Total length: ", seq_length)
             number_of_A = seq.count_base("A")

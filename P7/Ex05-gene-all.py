@@ -54,7 +54,7 @@ for Gene_name in GENES:
 
     gene_seq = gene["seq"]
     seq = Seq(gene_seq)
-    seq_length =len(gene_seq)
+    seq_length = len(gene_seq)
 
     termcolor.cprint("Total length: ", 'green', end="")
     print(seq_length)
