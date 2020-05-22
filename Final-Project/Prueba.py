@@ -295,6 +295,42 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 status = 404
 
 
+        elif endpoint == "/geneList":
+            chromo_start_end = arguments[1]
+            chromo = chromo_start_end.split("&")[0].split("=")[1]
+            start = chromo_start_end.split("&")[1].split("=")[1]
+            end = chromo_start_end.split("&")[-1].split("=")[1]
+            Endpoint = "/overlap/region/human/"
+            # This is the req line to search the info
+            Request_line = Endpoint + chromo + ":" + start + "-" + end + "?feature=gene;feature=transcript;feature=cds;feature=exon;content-type=application/json"
+            try:
+                Request_line.isidentifier()
+                # Create a variable with the data,form the JSON received
+                json_name = server(Request_line)
+
+                contents = f""" 
+                        <!DOCTYPE html>
+                        <html lang = "en">
+                        <head>
+                        <meta charset = "utf-8" >
+                            <title> Human gene sequence </title >
+                        </head >
+                        <body>
+                        <body style="background-color: lightblue;">
+                        <p> The names of the genes located in the chromosome from the start to end positions:</p>
+                        <a href="/">Main page</a>
+                        </body>
+                        </html>
+                        """
+                status = 200
+                for element in json_name:
+                    contents += f"""<p>{element["Name"]}</p>"""
+
+            except KeyError:
+                contents = Path("Error.html").read_text()
+                status = 404
+
+
         else:
             # Resource NOT FOUND
             termcolor.cprint("ERROR: Not found", 'red')

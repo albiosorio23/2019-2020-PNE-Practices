@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title> Welcome!! </title>
   </head>
-  <body>
+  <body style="background-color: lightgreen;">
   <h1> Browsing Human and Vertebrates genome </h1>
   <h2> BASIC Level Services </h2>
 
@@ -30,6 +30,7 @@
       <br>
       <input type="submit" value="Send">
   </form>
+  <h2> Medium Level Services </h2>
  <p>4)Human gene sequence</p>
   <form action="geneSeq" method="get">
       Introduce a human gene: <input type="text" name="gene">
@@ -45,6 +46,16 @@
   <p>6)Calculations on the human gene:</p>
   <form action="geneCalc" method="get">
       Introduce a human gene: <input type="text" name="gene">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+  <p>7)Names located in the chromosome from the start to the end positions:</p>
+  <form action="geneList" method="get">
+      Introduce a chromosome: <input type="text" name="chromo">
+      <br>
+      Introduce the start position: <input type="text" name="start">
+      <br>
+      Introduce the end position: <input type="text" name="end">
       <br>
       <input type="submit" value="Send">
   </form>
