@@ -192,7 +192,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <title> Human gene sequence </title >
                             </head >
                             <body>
-                            <body style="background-color: lightblue;">
+                            <body style="background-color: lightpink;">
                             <p> The sequence of the human gene is: {json_seq["seq"]}</p>
                             <a href="/">Main page</a>
                             </body>
@@ -226,7 +226,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <title> Human gene information </title >
                             </head >
                             <body>
-                            <body style="background-color: lightblue;">
+                            <body style="background-color: lightpink;">
                             <h> Information about the human gene: </h>
                             <p> Start: {json_info["start"]}</p>
                             <p> End: {json_info["end"]}</p>
@@ -277,7 +277,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <title> Human gene sequence </title >
                             </head >
                             <body>
-                            <body style="background-color: lightblue;">
+                            <body style="background-color: lightpink;">
                             <h>Calculations on the human gene: </h>
                             <p>Total legth: {seq_length}</p>
                             <p>A: {percentage_A}%</p>
@@ -316,7 +316,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <title> Human gene sequence </title >
                         </head >
                         <body>
-                        <body style="background-color: lightblue;">
+                        <body style="background-color: lightpink;">
                         <p> The names of the genes located in the chromosome from the start to end positions:</p>
                         <a href="/">Main page</a>
                         </body>
@@ -324,7 +324,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         """
                 status = 200
                 for element in json_name:
-                    contents += f"""<p>{element["Name"]}</p>"""
+                    contents += f"""<p>{element}</p>"""
 
             except KeyError:
                 contents = Path("Error.html").read_text()
