@@ -1,5 +1,74 @@
 REPORT - BASIC
 
+0) Main page
+- Input:
+http://localhost:8080/
+
+- Output:
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Welcome!! </title>
+  </head>
+  <body style="background-color: lightgreen;">
+  <h1> Browsing Human and Vertebrates genome </h1>
+  <h2> BASIC Level Services </h2>
+
+  <p>1)List of species in the genome database</p>
+  <form action="listSpecies" method="get">
+      Limit: <input type="text" name="limit">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+
+  <p>2)Information about the karyotype: </p>
+  <form action = "karyotype" method = "get">
+      Select the species: <input type="text" name="specie">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+
+  <p>3)Chromosome Length</p>
+  <form action="chromosomeLength" method="get">
+      Select the species: <input type="text" name="specie">
+      <br>
+      Select a chromosome: <input type="text" name="chromo">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+  <h2> Medium Level Services </h2>
+ <p>4)Human gene sequence</p>
+  <form action="geneSeq" method="get">
+      Introduce a human gene: <input type="text" name="gene">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+  <p>5)Information about a human gene</p>
+  <form action="geneInfo" method="get">
+      Introduce a human gene: <input type="text" name="gene">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+  <p>6)Calculations on the human gene:</p>
+  <form action="geneCalc" method="get">
+      Introduce a human gene: <input type="text" name="gene">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+  <p>7)Names located in the chromosome from the start to the end positions:</p>
+  <form action="geneList" method="get">
+      Introduce a chromosome: <input type="text" name="chromo">
+      <br>
+      Introduce the start position: <input type="text" name="start">
+      <br>
+      Introduce the end position: <input type="text" name="end">
+      <br>
+      <input type="submit" value="Send">
+  </form>
+  </body>
+</html>
+
 1) listSpecies endpoint
 * TEST 1.1:
 

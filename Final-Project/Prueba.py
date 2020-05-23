@@ -317,7 +317,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         </head >
                         <body>
                         <body style="background-color: lightpink;">
-                        <p> The names of the genes located in the chromosome from the start to end positions:</p>
+                        <p> The names of the genes located in the chromosome {chromo} from {start} to {end}:</p>
                         <a href="/">Main page</a>
                         </body>
                         </html>
