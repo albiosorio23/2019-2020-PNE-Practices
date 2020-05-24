@@ -175,3 +175,57 @@ http://localhost:8080/geneList?chromo=MT&start=2&end=2222
 </html>
 <p>MT-TF</p><p>MT-RNR1</p><p>MT-TV</p><p>MT-RNR2</p><p>MT-TF-201</p><p>MT-RNR1-201</p><p>MT-TV-201</p><p>MT-RNR2-201</p><p>ENSE00001544501</p><p>ENSE00001544499</p><p>ENSE00001544498</p><p>ENSE00001544497</p>
 
+* TEST 7.3:
+- Input:
+http://localhost:8080/geneList?chromo=h&start=0&end=30000
+
+- Output:
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset = "utf-8" >
+   <title> Human gene sequence </title >
+</head >
+<body>
+<body style="background-color: red;">
+</body>
+</html>
+h is not a human chromosome
+<a href="/">Main page</a>
+
+* TEST 7.4:
+- Input:
+http://localhost:8080/geneList?chromo=7&start=&end=199
+
+- Output:
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset = "utf-8" >
+   <title> Human gene sequence </title >
+</head >
+<body>
+<body style="background-color: red;">
+</body>
+</html>
+You must introduced the end and start position
+    <a href="/">Main page</a>
+
+* TEST 7.5:
+
+-Input:
+http://localhost:8080/geneList?chromo=1&start=hello&end=2222
+
+- Output:
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset = "utf-8" >
+   <title> Human gene sequence </title >
+</head >
+<body>
+<body style="background-color: red;">
+</body>
+</html>
+Start and end posicions must be integers
+<a href="/">Main page</a>

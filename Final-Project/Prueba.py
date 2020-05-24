@@ -294,44 +294,71 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
         elif endpoint == "/geneList":
-            chromo_start_end = arguments[1]
-            chromo = chromo_start_end.split("&")[0].split("=")[1]
-            start = chromo_start_end.split("&")[1].split("=")[1]
-            end = chromo_start_end.split("&")[-1].split("=")[1]
-            Endpoint = "/overlap/region/human/"
-            # This is the req line to search the info
-            Request_line = Endpoint + chromo + ":" + start + "-" + end + "?feature=gene;feature=transcript;feature=cds;feature=exon;content-type=application/json"
-
             try:
-                Request_line.isidentifier()
-                # Create a variable with the data,form the JSON received
-                json_name = server(Request_line)
-
+                chromo_start_end = arguments[1]
+                chromo = chromo_start_end.split("&")[0].split("=")[1]
+                start = chromo_start_end.split("&")[1].split("=")[1]
+                end = chromo_start_end.split("&")[-1].split("=")[1]
+                Endpoint = "/overlap/region/human/"
+                human_chromo =  ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+                                     "16", "17", "18", "19", "20", "21", "22", "X", "Y", "MT"]
                 contents = f""" 
-                        <!DOCTYPE html>
-                        <html lang = "en">
-                        <head>
-                        <meta charset = "utf-8" >
-                            <title> Human gene sequence </title >
-                        </head >
-                        <body>
-                        <body style="background-color: lightpink;">
-                        <p> The names of the genes located in the chromosome {chromo} from {start} to {end}:</p>
-                        <a href="/">Main page</a>
-                        </body>
-                        </html>
-                        """
-                status = 200
-                for element in json_name:
+                               <!DOCTYPE html>
+                               <html lang = "en">
+                               <head>
+                               <meta charset = "utf-8" >
+                                   <title> Human gene sequence </title >
+                               </head >
+                               <body>
+                               <body style="background-color: red;">
+                               </body>
+                               </html>
+                               """
+                if chromo not in human_chromo:
+                    contents += f""" {chromo} is not a human chromosome
+                                <a href="/">Main page</a>"""
+                    status = 404
+                elif chromo == "" or start =="" or end== "":
+                    contents += f""" You must introduced the end and start position
+                                    <a href="/">Main page</a>"""
+                    status = 404
+                elif start.isdigit() is False or end.isdigit() is False:
+                    contents += f""" Start and end positions must be integers
+                                <a href="/">Main page</a>"""
+                    status = 404
+                else:
+                    # This is the req line to search the info
+                    Request_line = Endpoint + chromo + ":" + start + "-" + end + "?feature=gene;feature=transcript;feature=cds;feature=exon;content-type=application/json"
 
-                    try:
-                        name= element["external_name"]
-                        contents += f"""<p>{name}</p>"""
-                    except KeyError:
-                        contents += f"""<p>{element["id"]}</p>"""
 
+                    Request_line.isidentifier()
+                    # Create a variable with the data,form the JSON received
+                    json_name = server(Request_line)
 
-            except KeyError:
+                    contents = f""" 
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title> Human gene sequence </title >
+                            </head >
+                            <body>
+                            <body style="background-color: lightpink;">
+                            <p> The names of the genes located in the chromosome {chromo} from {start} to {end}:</p>
+                            <a href="/">Main page</a>
+                            </body>
+                            </html>
+                            """
+
+                    for element in json_name:
+                        try:
+                            name= element["external_name"]
+                            contents += f"""<p>{name}</p>"""
+                        except KeyError:
+                            contents += f"""<p>{element["id"]}</p>"""
+                    status = 200
+
+            except TypeError or IndexError or KeyError:
                 contents = Path("Error.html").read_text()
                 status = 404
 
