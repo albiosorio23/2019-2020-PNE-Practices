@@ -68,7 +68,7 @@ while True:
             number_of_C = seq.count_base("C")
             percentage_C = "{:.1f}".format(100 * number_of_C / seq_length)
 
-            response = ("A: ", number_of_A, percentage_A, "%" + "\n","C: ", number_of_C, percentage_C, "%" + "\n", "G: ", number_of_G, percentage_G, "%" + "\n", "T: ", number_of_T, percentage_T, "%" + "\n")
+            response = ("A: " + str(number_of_A)  +  " (" +percentage_A + "%)" + "\n" + "C: "+ str(number_of_C)   +  " (" + percentage_C + "%)" + "\n" + "G: " + str(number_of_G)  + " (" + percentage_G + "%)" + "\n" + "T: " + str(number_of_T)  + " (" + percentage_T + "%)" + "\n")
 
         elif "COMP" in msg:
             gene_seq = msg[msg.find(" ") + 1:]
