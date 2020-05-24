@@ -3,6 +3,7 @@ import socketserver
 import termcolor
 from pathlib import Path
 import json
+from Seq1 import Seq
 
 PORT = 8080
 Server = "rest.ensembl.org"
@@ -56,6 +57,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = Path("Finalproject.html").read_text()
             status = 200
 
+#------------------------------------------- BASIC LEVEL ------------------------------------------------
+
         elif endpoint == "/listSpecies":
             # Get what is after ? (limit=10)
             limit_number = arguments[1]
@@ -99,6 +102,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for element in name_specie[:int(limit)]:
                     contents += f""" <p>   • {element["common_name"]}</p>"""
                 contents += f"""<a href="/">Main page</a>"""
+
         elif endpoint == "/karyotype":
             # Get what is after ? (specie=mouse)
             specie_name = arguments[1]
@@ -145,10 +149,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             Request_line = Endpoint + name_specie + "/" + number_chromo + Parameters
             try:
                 Request_line.isidentifier()
-
                 # Create a variable with the data, form the JSON received
                 l_chromosome = server(Request_line)
-
                 contents = f""" 
                             <!DOCTYPE html>
                             <html lang = "en">
@@ -164,6 +166,172 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             </html>
                             """
                 status = 200
+
+            except KeyError:
+                contents = Path("Error.html").read_text()
+                status = 404
+
+# ------------------------------------------- MEDIUM LEVEL ------------------------------------------------
+
+        elif endpoint == "/geneSeq":
+            gene_name = arguments[1]
+            gene = gene_name.split("=")[1]
+            Endpoint = "/xrefs/symbol/homo_sapiens/"
+            # This is the req line to prove that the gene is en human
+            Request_line = Endpoint + gene + Parameters
+            try:
+                Request_line.isidentifier()
+                json_gene = server(Request_line)
+                id = json_gene[0]["id"]
+                Request_line_1 = "/sequence/id/" + id + Parameters
+                json_seq = server(Request_line_1)
+                contents = f""" 
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title> Human gene sequence </title >
+                            </head >
+                            <body>
+                            <body style="background-color: lightpink;">
+                            <p> The sequence of the human gene is: {json_seq["seq"]}</p>
+                            <a href="/">Main page</a>
+                            </body>
+                            </html>
+                            """
+                status = 200
+
+            except IndexError:
+                contents = Path("Error.html").read_text()
+                status = 404
+
+        elif endpoint == "/geneInfo":
+            gene_name = arguments[1]
+            gene = gene_name.split("=")[1]
+            Endpoint = "/xrefs/symbol/homo_sapiens/"
+            # This is the req line to search the info
+            Request_line = Endpoint + gene + Parameters
+            try:
+                Request_line.isidentifier()
+                # Create a variable with the data,form the JSON received
+                json_gene = server(Request_line)
+                id = json_gene[0]["id"]
+                Request_line_1 = "/lookup/id/" + id + Parameters
+                json_info = server(Request_line_1)
+                length = json_info["end"] - json_info["start"]
+                contents = f""" 
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title> Human gene information </title >
+                            </head >
+                            <body>
+                            <body style="background-color: lightpink;">
+                            <h> Information about the human gene: </h>
+                            <p> Start: {json_info["start"]}</p>
+                            <p> End: {json_info["end"]}</p>
+                            <p> Length: {length}</p>
+                            <p> Id: {json_info["id"]}</p>
+                            <p> Chromose: {json_info["seq_region_name"]}</p>
+                            <a href="/">Main page</a>
+                            </body>
+                            </html>
+                            """
+                status = 200
+
+            except IndexError:
+                contents = Path("Error.html").read_text()
+                status = 404
+
+        elif endpoint == "/geneCalc":
+            gene_name = arguments[1]
+            gene = gene_name.split("=")[1]
+            Endpoint = "/xrefs/symbol/homo_sapiens/"
+            # This is the req line to search the info
+            Request_line = Endpoint + gene + Parameters
+            try:
+                Request_line.isidentifier()
+                # Create a variable with the data,form the JSON received
+                json_gene = server(Request_line)
+                id = json_gene[0]["id"]
+                Request_line_1 = "/sequence/id/" + id + Parameters
+                json_seq = server(Request_line_1)
+                seq_ = json_seq["seq"]
+                seq = Seq(seq_)
+                seq_length = seq.len()
+
+                number_of_A = seq.count_base("A")
+                percentage_A = "{:.1f}".format(100 * number_of_A / seq_length)
+                number_of_G = seq.count_base("G")
+                percentage_G = "{:.1f}".format(100 * number_of_G / seq_length)
+                number_of_T = seq.count_base("T")
+                percentage_T = "{:.1f}".format(100 * number_of_T / seq_length)
+                number_of_C = seq.count_base("C")
+                percentage_C = "{:.1f}".format(100 * number_of_C / seq_length)
+
+                contents = f""" 
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title> Human gene sequence </title >
+                            </head >
+                            <body>
+                            <body style="background-color: lightpink;">
+                            <h>Calculations on the human gene: </h>
+                            <p>Total legth: {seq_length}</p>
+                            <p>A: {percentage_A}%</p>
+                            <p>C: {percentage_C}%</p>
+                            <p>G: {percentage_G}%</p>
+                            <p>T: {percentage_T}%</p>
+                            <a href="/">Main page</a>
+                            </body>
+                            </html>
+                            """
+                status = 200
+
+            except IndexError:
+                contents = Path("Error.html").read_text()
+                status = 404
+
+        elif endpoint == "/geneList":
+            chromo_start_end = arguments[1]
+            chromo = chromo_start_end.split("&")[0].split("=")[1]
+            start = chromo_start_end.split("&")[1].split("=")[1]
+            end = chromo_start_end.split("&")[-1].split("=")[1]
+            Endpoint = "/overlap/region/human/"
+            # This is the req line to search the info
+            Request_line = Endpoint + chromo + ":" + start + "-" + end + "?feature=gene;feature=transcript;feature=cds;feature=exon;content-type=application/json"
+
+            try:
+                Request_line.isidentifier()
+                # Create a variable with the data,form the JSON received
+                json_name = server(Request_line)
+
+                contents = f""" 
+                        <!DOCTYPE html>
+                        <html lang = "en">
+                        <head>
+                        <meta charset = "utf-8" >
+                            <title> Human gene sequence </title >
+                        </head >
+                        <body>
+                        <body style="background-color: lightpink;">
+                        <p> The names of the genes located in the chromosome {chromo} from {start} to {end}:</p>
+                        <a href="/">Main page</a>
+                        </body>
+                        </html>
+                        """
+                status = 200
+                for element in json_name:
+
+                    try:
+                        name= element["external_name"]
+                        contents += f"""<p>{name}</p>"""
+                    except KeyError:
+                        contents += f"""<p>{element["id"]}</p>"""
+
 
             except KeyError:
                 contents = Path("Error.html").read_text()
