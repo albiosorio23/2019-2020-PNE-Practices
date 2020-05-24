@@ -43,22 +43,22 @@ while True:
         response = ""
 
         if msg == "PING":
-            response = "OK!\n"
+            response = f"""OK!\n"""
 
         elif "GET" in msg:
             # Para coger solo el número
-            seq_get = int(msg[msg.find(" ") + 1:]) # Seq_get es el número del 0-4 que introduce en la terminal
+            seq_get = int(msg[msg.find(" ") + 1:])  # Seq_get es el número del 0-4 que introduce en la terminal
             # Devuelve la secuencia en la posición coorespondiente al nº seq_get
-            response = list_response[seq_get]
+            response = f""" {list_response[seq_get]} """
 
         # Info command
         elif "INFO" in msg:
-            gene_seq = msg[msg.find(" ")+1:] #Secuencia introducida en la terminal
+            gene_seq = msg[msg.find(" ") + 1:]  # Secuencia introducida en la terminal
 
             seq = Seq(gene_seq)
             seq_length = seq.len()
 
-            print("Total length: ", seq_length)
+            # response = ("Total length: ", str(seq_length))
             number_of_A = seq.count_base("A")
             percentage_A = "{:.1f}".format(100 * number_of_A / seq_length)
             number_of_G = seq.count_base("G")
@@ -68,30 +68,34 @@ while True:
             number_of_C = seq.count_base("C")
             percentage_C = "{:.1f}".format(100 * number_of_C / seq_length)
 
-            response = ("A: " + str(number_of_A)  +  " (" +percentage_A + "%)" + "\n" + "C: "+ str(number_of_C)   +  " (" + percentage_C + "%)" + "\n" + "G: " + str(number_of_G)  + " (" + percentage_G + "%)" + "\n" + "T: " + str(number_of_T)  + " (" + percentage_T + "%)" + "\n")
+            response = f"""Total length: {str(seq_length)} \n  A: {str(
+                number_of_A)}  ({percentage_A}%) \n C: {str(
+                number_of_C)} ({percentage_C}%) \n G: {str(
+                number_of_G)} ({percentage_G}%) \n T: {str(
+                number_of_T)} ({percentage_T}%) \n"""
 
         elif "COMP" in msg:
             gene_seq = msg[msg.find(" ") + 1:]
             seq = Seq(gene_seq)
-            response = seq.complement() + "\n"
+            response = f"""{seq.complement()} \n"""
 
         elif "REV" in msg:
             gene_seq = msg[msg.find(" ") + 1:]
             seq = Seq(gene_seq)
-            response = seq.reverse() + "\n"
+            response = """f{seq.reverse()}\n"""
 
         elif "GENE" in msg:
             gene_name = msg[msg.find(" ") + 1:]
             s = Seq()
             s.read_fasta(FOLDER + gene_name + txt)
-            response = str(s) + "\n"
+            response = f"""{str(s)} \n"""
 
         else:
             termcolor.cprint("Unknown command!!!", 'red')
-            response = "Unkwnown command"
+            response = f"""Unkwnown command"""
 
         termcolor.cprint(msg[:msg.find(" ")], "green")
-        print (response)
+        print(response)
 
         cs.send(response.encode())
         cs.close()
