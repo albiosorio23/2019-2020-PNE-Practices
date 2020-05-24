@@ -309,6 +309,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 start = chromo_start_end.split("&")[1].split("=")[1]
                 end = chromo_start_end.split("&")[-1].split("=")[1]
                 Endpoint = "/overlap/region/human/"
+                # Create a list with the human chromosomes to check it introduces chromo is correct
                 human_chromo = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
                                 "16", "17", "18", "19", "20", "21", "22", "X", "Y", "MT"]
                 contents = f""" 
@@ -323,14 +324,17 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                            </body>
                            </html>
                            """
+                # If the chromosome is not a human chromosome
                 if chromo not in human_chromo:
                     contents += f""" {chromo} is not a human chromosome
                                                 <a href="/">Main page</a>"""
                     status = 404
+                # If nothing is inserted in the main page
                 elif chromo == "" or start == "" or end == "":
                     contents += f""" You must introduced the end and start position
                                                     <a href="/">Main page</a>"""
                     status = 404
+                # If the start or end positions are not correct numbers
                 elif start.isdigit() is False or end.isdigit() is False:
                     contents += f""" Start and end positions must be integers
                                                 <a href="/">Main page</a>"""
