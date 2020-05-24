@@ -99,7 +99,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         <p> The name of the species are: </p>"""
 
                 status = 200
-                for element in name_specie[:int(limit)]:
+                for element in name_specie[:int(limit)]: # Fron the beginning to the limit introduced by the client
                     contents += f""" <p>   • {element["common_name"]}</p>"""
                 contents += f"""<a href="/">Main page</a>"""
 
@@ -112,6 +112,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # This is the req line to search the info
             Request_line = Endpoint + name_specie + Parameters
             try:
+                # Check if the req line is ok
                 Request_line.isidentifier()
                 # Create a variable with the data,form the JSON received
                 k_specie = server(Request_line)
@@ -148,6 +149,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # This is the req line to search the info
             Request_line = Endpoint + name_specie + "/" + number_chromo + Parameters
             try:
+                # Check if the req line is ok
                 Request_line.isidentifier()
                 # Create a variable with the data, form the JSON received
                 l_chromosome = server(Request_line)
@@ -180,7 +182,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # This is the req line to prove that the gene is en human
             Request_line = Endpoint + gene + Parameters
             try:
+                # Check if the req line is ok
                 Request_line.isidentifier()
+                # Create a variable with the data,form the JSON received
                 json_gene = server(Request_line)
                 id = json_gene[0]["id"]
                 Request_line_1 = "/sequence/id/" + id + Parameters
@@ -212,11 +216,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # This is the req line to search the info
             Request_line = Endpoint + gene + Parameters
             try:
+                # Check if the req line is ok
                 Request_line.isidentifier()
                 # Create a variable with the data,form the JSON received
                 json_gene = server(Request_line)
                 id = json_gene[0]["id"]
                 Request_line_1 = "/lookup/id/" + id + Parameters
+                # Create a variable with the data,form the JSON received
                 json_info = server(Request_line_1)
                 length = json_info["end"] - json_info["start"]
                 contents = f""" 
@@ -251,6 +257,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # This is the req line to search the info
             Request_line = Endpoint + gene + Parameters
             try:
+                # Check if the req line is ok
                 Request_line.isidentifier()
                 # Create a variable with the data,form the JSON received
                 json_gene = server(Request_line)
@@ -305,6 +312,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             Request_line = Endpoint + chromo + ":" + start + "-" + end + "?feature=gene;feature=transcript;feature=cds;feature=exon;content-type=application/json"
 
             try:
+                # Check if the req line is ok
                 Request_line.isidentifier()
                 # Create a variable with the data,form the JSON received
                 json_name = server(Request_line)
