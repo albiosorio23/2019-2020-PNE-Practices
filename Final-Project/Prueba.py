@@ -147,10 +147,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             Request_line = Endpoint + name_specie + "/" + number_chromo + Parameters
             try:
                 Request_line.isidentifier()
-
                 # Create a variable with the data, form the JSON received
                 l_chromosome = server(Request_line)
-
                 contents = f""" 
                             <!DOCTYPE html>
                             <html lang = "en">
@@ -175,11 +173,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             gene_name = arguments[1]
             gene = gene_name.split("=")[1]
             Endpoint = "/xrefs/symbol/homo_sapiens/"
-            # This is the req line to search the info
+            # This is the req line to prove that the gene is en human
             Request_line = Endpoint + gene + Parameters
             try:
                 Request_line.isidentifier()
-                # Create a variable with the data,form the JSON received
                 json_gene = server(Request_line)
                 id = json_gene[0]["id"]
                 Request_line_1 = "/sequence/id/" + id + Parameters
@@ -200,7 +197,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             """
                 status = 200
 
-            except KeyError:
+
+            except IndexError:
                 contents = Path("Error.html").read_text()
                 status = 404
 
@@ -239,7 +237,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             """
                 status = 200
 
-            except KeyError:
+            except IndexError:
                 contents = Path("Error.html").read_text()
                 status = 404
 
@@ -290,7 +288,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             """
                 status = 200
 
-            except KeyError:
+            except IndexError:
                 contents = Path("Error.html").read_text()
                 status = 404
 
@@ -303,6 +301,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             Endpoint = "/overlap/region/human/"
             # This is the req line to search the info
             Request_line = Endpoint + chromo + ":" + start + "-" + end + "?feature=gene;feature=transcript;feature=cds;feature=exon;content-type=application/json"
+
             try:
                 Request_line.isidentifier()
                 # Create a variable with the data,form the JSON received
@@ -324,12 +323,17 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         """
                 status = 200
                 for element in json_name:
-                    contents += f"""<p>{element}</p>"""
+
+                    try:
+                        name= element["external_name"]
+                        contents += f"""<p>{name}</p>"""
+                    except KeyError:
+                        contents += f"""<p>{element["id"]}</p>"""
+
 
             except KeyError:
                 contents = Path("Error.html").read_text()
                 status = 404
-
 
         else:
             # Resource NOT FOUND
